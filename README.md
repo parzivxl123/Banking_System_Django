@@ -233,4 +233,4 @@ Tests cover user creation, authentication flows, and transaction logic.
 
 ## Author
 
-**Aarush** — built with Django REST Framework.
+**Parzival** — built with Django REST Framework.
