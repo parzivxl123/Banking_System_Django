@@ -25,14 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vcd&gg6)7s^*5ayte24+ik2sw)%kity&ufr==pul4(_3d)m#&('
 
 
-EMAIL_BACKEND = (
+EMAIL_BACKEND =     (
 "django.core.mail.backends.smtp.EmailBackend"
 )
 EMAIL_HOST = os.getenv(
     "EMAIL_HOST"
 )
 
-EMAIL_PORT = int(
+EMAIL_PORT =(
     os.getenv("EMAIL_PORT")
 )
 
@@ -116,8 +116,12 @@ WSGI_APPLICATION = 'banking_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 

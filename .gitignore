@@ -5,3 +5,4 @@ db.sqlite3
 .env
 .idea/
 .pytest_cache/
+.env.docker

@@ -1,0 +1,38 @@
+services:
+
+  db:
+    image: mysql:8.0
+
+    restart: always
+
+    environment:
+      MYSQL_DATABASE: django_banking_system
+      MYSQL_ROOT_PASSWORD: bankingsys123
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  web:
+    build: .
+
+    env_file:
+      - .env.docker
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - db
+
+    command: >
+      sh -c "
+      sleep 20 &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+
+volumes:
+  mysql_data:
