@@ -16,11 +16,11 @@ urlpatterns = [
         WithdrawalView.as_view()
     ),
     path(
-        "deposit/history/",
+        "deposit/history/<int:user_id>/",
         DepositHistoryView.as_view()
     ),
     path(
-        'withdrawal/history',
+        'withdrawal/history/<int:user_id>/',
         WithdrawalHistoryView.as_view()
     ),
     path(

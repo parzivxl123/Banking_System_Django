@@ -85,26 +85,73 @@ class TransactionView(APIView):
         )
 
 class TransactionHistoryView(APIView):
-    def get(self,request):
-        user = request.user
-        sentTransactions = Transaction.objects.filter(
-            sender = user
+    def get(self,request,user_id:int):
+        try:
+            user = User.objects.get(id = user_id)
+        except User.DoesNotExist:
+            return Response({
+                "User Not found"
+            },status=404
+            )
+        page = int(request.GET.get(
+            "page",
+            1
+        ))
+
+        page_size = int(
+            request.GET.get(
+                "page_size",
+                10
+            )
         )
-        receivedtransactions = Transaction.objects.filter(
-            receiver=user
+        start = (
+            page - 1
+        ) * page_size
+        end = start + page_size
+
+        sent_queryset = Transaction.objects.filter(
+            sender=user
         )
 
+        received_queryset = Transaction.objects.filter(
+            receiver=user
+        )
+        sentTransactions = sent_queryset[
+            start:end
+        ]
+        receivedTransactions = received_queryset[
+            start:end
+        ]
         sentserializer = TranssactionSerializer(
             sentTransactions,
             many=True
         )
         receivedserializer = TranssactionSerializer(
-            receivedtransactions,
+            receivedTransactions,
             many=True
         )
 
-        return Response({
-            "user":user.username,
-            "sent":sentserializer.data,
-            "received":receivedserializer.data
-        })
+        return Response(
+            {
+                "user":
+                    user.username,
+
+                "page":
+                    page,
+
+                "page_size":
+                    page_size,
+
+                "total_sent":
+                    sent_queryset.count(),
+
+                "total_received":
+                    received_queryset.count(),
+
+                "sent":
+                    sentserializer.data,
+
+                "received":
+                    receivedserializer.data
+            }
+        )

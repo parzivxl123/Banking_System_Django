@@ -194,45 +194,145 @@ class WithdrawalView(APIView):
 
 class DepositHistoryView(APIView):
 
-    permission_classes = [
-        IsAuthenticated
-    ]
+    def get(self, request, user_id):
 
-    def get(self, request):
+        try:
+            user = User.objects.get(
+                id=user_id
+            )
 
-        deposits = Deposits.objects.filter(
-            user=request.user
-        ).order_by(
-            '-created_at'
+        except User.DoesNotExist:
+
+            return Response(
+                {
+                    "error":
+                    "User Not Found"
+                },
+                status=404
+            )
+
+        page = int(
+            request.GET.get(
+                "page",
+                1
+            )
         )
+
+        page_size = int(
+            request.GET.get(
+                "page_size",
+                10
+            )
+        )
+
+        start = (
+            page - 1
+        ) * page_size
+
+        end = start + page_size
+
+        deposit_queryset = Deposits.objects.filter(
+            user=user
+        ).order_by("-id")
+
+        deposits = deposit_queryset[
+            start:end
+        ]
 
         serializer = DepositSerializer(
             deposits,
             many=True
         )
+
         return Response(
-            serializer.data
+            {
+                "user":
+                user.username,
+
+                "page":
+                page,
+
+                "page_size":
+                page_size,
+
+                "total_deposits":
+                deposit_queryset.count(),
+
+                "deposits":
+                serializer.data
+            }
         )
 
 
 class WithdrawalHistoryView(APIView):
 
-    permission_classes = [
-        IsAuthenticated
-    ]
-    def get(self, request):
+    def get(self, request, user_id):
 
-        withdrawals = Withdrawals.objects.filter(
-            user=request.user
-        ).order_by(
-            '-created_at'
+        try:
+            user = User.objects.get(
+                id=user_id
+            )
+
+        except User.DoesNotExist:
+
+            return Response(
+                {
+                    "error":
+                    "User Not Found"
+                },
+                status=404
+            )
+
+        page = int(
+            request.GET.get(
+                "page",
+                1
+            )
         )
+
+        page_size = int(
+            request.GET.get(
+                "page_size",
+                10
+            )
+        )
+
+        start = (
+            page - 1
+        ) * page_size
+
+        end = start + page_size
+
+        withdrawal_queryset = Withdrawals.objects.filter(
+            user=user
+        ).order_by("-id")
+
+        withdrawals = withdrawal_queryset[
+            start:end
+        ]
+
         serializer = WithdrawalSerializer(
             withdrawals,
             many=True
         )
+
         return Response(
-            serializer.data
+            {
+                "user":
+                user.username,
+
+                "page":
+                page,
+
+                "page_size":
+                page_size,
+
+                "total_withdrawals":
+                withdrawal_queryset.count(),
+
+                "withdrawals":
+                serializer.data
+            }
         )
 
 

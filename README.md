@@ -222,7 +222,7 @@ Tests cover user creation, authentication flows, and transaction logic.
 ## Roadmap
 
 - [x] Password reset via email
-- [ ] Response pagination
+- [x] Response pagination
 - [ ] Docker support
 - [ ] Rate limiting
 - [ ] Structured logging
