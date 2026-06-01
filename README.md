@@ -223,7 +223,7 @@ Tests cover user creation, authentication flows, and transaction logic.
 
 - [x] Password reset via email
 - [x] Response pagination
-- [ ] Docker support
+- [x] Docker support
 - [ ] Rate limiting
 - [ ] Structured logging
 - [ ] Email notifications
