@@ -221,7 +221,7 @@ Tests cover user creation, authentication flows, and transaction logic.
 
 ## Roadmap
 
-- [ ] Password reset via email
+- [x] Password reset via email
 - [ ] Response pagination
 - [ ] Docker support
 - [ ] Rate limiting
