@@ -105,12 +105,8 @@ class TransactionTests(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
-
-
     def test_unauthorized_user(self):
-
         self.client.credentials()
-
         response = self.client.post(
             "/transactions/",
             {
@@ -119,7 +115,6 @@ class TransactionTests(APITestCase):
             },
             format="json"
         )
-
         self.assertEqual(
             response.status_code,
             status.HTTP_403_FORBIDDEN

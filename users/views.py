@@ -7,6 +7,9 @@ from django.contrib.auth.hashers import (
     make_password
 )
 from decimal import Decimal
+import uuid
+from django.core.mail import send_mail
+from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 class UserView(APIView):
 
@@ -230,4 +233,68 @@ class WithdrawalHistoryView(APIView):
         )
         return Response(
             serializer.data
+        )
+
+
+class ForgotPasswordView(APIView):
+    def post(self,request):
+        email = request.data.get(
+            "email"
+        )
+
+        try:
+            user = User.objects.get(
+                email=email
+            )
+        except User.DoesNotExist:
+            return Response(
+                {
+                    "error" : "User Not Found"
+                },status=404
+            )
+        token = str(uuid.uuid4())
+        user.reset_token = token
+        user.save()
+
+        reset_link = (
+            f"http://127.0.0.1:8000/"
+            f"users/reset-password/"
+            f"?token={token}"
+        )
+
+        send_mail(
+            "Password Reset",
+            f"Click Below:\n\n{reset_link}",
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email]
+        )
+
+        return Response({
+            "Password Change Email Sent"
+        })
+
+class ResetPasswordView(APIView):
+    def post(self,request):
+        token = request.data.get("token")
+        newpassword = request.data.get("newpassword")
+        try:
+            user = User.objects.get(
+                reset_token=token
+            )
+        except User.DoesNotExist:
+            return Response({
+                "error" : "User Not Found"
+            },status=404
+            )
+
+        user.password = make_password(
+            newpassword
+        )
+        user.reset_token = None
+        user.save()
+
+        return Response(
+            {
+                "Password Updated"
+            }
         )

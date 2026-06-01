@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import UserView, UserViewLimit, DepositView, WithdrawalView, DepositHistoryView, WithdrawalHistoryView
+from .views import UserView, UserViewLimit, DepositView, WithdrawalView, DepositHistoryView, WithdrawalHistoryView, \
+    ForgotPasswordView, ResetPasswordView
 
 urlpatterns = [
     path("", UserView.as_view()),
@@ -21,6 +22,15 @@ urlpatterns = [
     path(
         'withdrawal/history',
         WithdrawalHistoryView.as_view()
+    ),
+    path(
+        "forgot-password/",
+        ForgotPasswordView.as_view()
+    ),
+
+    path(
+        "reset-password/",
+        ResetPasswordView.as_view()
     ),
 
 ]

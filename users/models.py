@@ -10,7 +10,11 @@ class User(AbstractUser):
         decimal_places=2,
         default=0
     )
-
+    reset_token = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return self.username
 
