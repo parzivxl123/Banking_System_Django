@@ -80,7 +80,17 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
 ]
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
 
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/hour",
+        "user": "1000/hour",
+    }
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -169,7 +179,20 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),  
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/hour",
+        "user": "1000/hour",
+    }
+
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+
